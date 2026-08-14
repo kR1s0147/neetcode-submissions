@@ -1,0 +1,26 @@
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m,n = len(s),len(p)
+        dp = {}
+        def dfs(i,j):
+            if (i,j) in dp:
+                return dp[(i,j)]
+            if i >= len(s) and j>= len(p):
+                dp[(i,j)] =  True
+                return True
+            if j>= len(p):
+                dp[(i,j)] = False
+                return False
+            match  = i < len(s) and (s[i] == p[j] or p[j] == ".")
+            if j+1 < len(p) and p[j+1] == "*":
+                res =  dfs(i,j+2) or (match and dfs(i+1,j))
+                dp[(i,j)] = res
+                return res
+            if match:
+                res=dfs(i+1,j+1)
+                dp[(i,j)] = res
+                return res
+            dp[(i,j)] = False
+            return False
+                
+        return dfs(0,0)
